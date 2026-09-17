@@ -3,8 +3,9 @@ define([
     'mo/lang',
     'dollar',
     'darkdom',
-    './ui'
-], function(_, $, darkdom, ui){
+    './ui',
+    './error'
+], function(_, $, darkdom, ui, CkError){
 
 var control = ui.component.control,
     picker = ui.component.picker,
@@ -189,8 +190,11 @@ function find_dark(fn){
             return;
         }
         target = darkdom.getDarkByCustomId(target);
-        if (target[0] 
-                && !target[0]._ckDisablePageForward) {
+        if (!target[0]) {
+            CkError.warn('no dark component registered for id "' + e.target.id + '"');
+            return;
+        }
+        if (!target[0]._ckDisablePageForward) {
             fn(target, e);
             root.updateDarkDOM({
                 ignoreRender: true

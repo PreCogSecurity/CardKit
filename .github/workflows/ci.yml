@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        # --ignore-scripts: the 2013-era imagemin toolchain (jpegtran-bin /
+        # optipng-bin) runs postinstall scripts that crash on modern Node.
+        # Lint and the unit suite do not need those binaries.
+        run: npm ci --ignore-scripts
+
+      - name: Lint
+        run: npx grunt jshint
+
+      - name: Test
+        run: npm test

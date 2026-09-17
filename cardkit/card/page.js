@@ -5,6 +5,7 @@ var darkdom = require('darkdom'),
     _ = require('mo/lang/mix'),
     convert = require('mo/template/micro').convertTpl,
     helper = require('../helper'),
+    CkError = require('../error'),
     render_title = convert(require('../tpl/page/title').template),
     render_nav = convert(require('../tpl/page/nav').template),
     render_banner = convert(require('../tpl/page/banner').template),
@@ -104,8 +105,11 @@ var exports = {
         var page = darkdom({
             render: function(data){
                 var com = data.component;
-                data.hasHeader = com.title 
-                    || com.nav || com.actionbar;
+                if (!com) {
+                    throw new CkError('missing component data for page card');
+                }
+                data.hasHeader = !!(com.title 
+                    || com.nav || com.actionbar);
                 data.isBlank = helper.isBlank(data.content);
                 return render_page(data);
             } 

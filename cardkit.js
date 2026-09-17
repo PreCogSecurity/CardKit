@@ -7,9 +7,10 @@ define('cardkit', [
     'cardkit/oldspec',
     'cardkit/ui',
     'cardkit/supports',
-    'cardkit/bus'
+    'cardkit/bus',
+    'cardkit/error'
 ], function(_, $, mainloop,
-    specs, oldspecs, ui, supports, bus){
+    specs, oldspecs, ui, supports, bus, CkError){
 
 var DEFAULT_DECK = 'main',
     UNMOUNT_FLAG = 'unmount-page',
@@ -140,10 +141,15 @@ var exports = {
         var is_init = !last_decktop;
         if (!page[0] || !is_page) {
             if (!is_init) {
+                CkError.warn('page not found for "' + pid + '"');
                 return false;
             }
             location.replace('#' + this._config.defaultPage);
             page = $('#' + this._config.defaultPage);
+            if (!page[0]) {
+                CkError.warn('page not found for "' + pid + '"');
+                return false;
+            }
         }
         window.scrollTo(0, 0);
         if (is_init) {

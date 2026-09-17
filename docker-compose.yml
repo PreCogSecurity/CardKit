@@ -1,0 +1,6 @@
+services:
+  cardkit:
+    build: .
+    volumes:
+      - .:/app
+    command: grunt
