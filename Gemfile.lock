@@ -1,5 +1,5 @@
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://rubygems.org/
   specs:
     animate (0.2.beta.0)
       compass (>= 0.13.alpha.0)
